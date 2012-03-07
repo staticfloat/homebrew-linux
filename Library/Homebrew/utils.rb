@@ -105,7 +105,7 @@ def quiet_system cmd, *args
 end
 
 def curl *args
-  curl = Pathname.new '/usr/bin/curl'
+  curl = Pathname.new SystemCommand.curl
   raise "#{curl} is not executable" unless curl.exist? and curl.executable?
 
   args = [HOMEBREW_CURL_ARGS, HOMEBREW_USER_AGENT, *args]
@@ -199,7 +199,7 @@ end
 # Returns array of architectures that the given command or library is built for.
 def archs_for_command cmd
   cmd = cmd.to_s # If we were passed a Pathname, turn it into a string.
-  cmd = `/usr/bin/which #{cmd}` unless Pathname.new(cmd).absolute?
+  cmd = `#{SystemCommand.which} #{cmd}` unless Pathname.new(cmd).absolute?
   cmd.gsub! ' ', '\\ '  # Escape spaces in the filename.
 
   lines = `/usr/bin/file -L #{cmd}`

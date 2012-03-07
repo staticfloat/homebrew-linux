@@ -171,8 +171,8 @@ class FormulaInstaller
     fork do
       begin
         read.close
-        exec '/usr/bin/nice',
-             '/usr/bin/ruby',
+        exec SystemCommand.nice,
+             SystemCommand.ruby,
              '-I', Pathname.new(__FILE__).dirname,
              '-rbuild',
              '--',
