@@ -31,7 +31,7 @@ class SystemCommand
     when 'FreeBSD'
       @@provider ||= SystemCommandFreeBSD.new
     else
-      raise Exception.new 'Unknown platform. Aborting.'
+      raise Exception.new('Unknown platform. Aborting.')
     end
   end
 
