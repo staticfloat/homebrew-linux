@@ -14,16 +14,20 @@ def cache
   if ENV['HOMEBREW_CACHE']
     Pathname.new(ENV['HOMEBREW_CACHE'])
   else
-    root_library = Pathname.new("/Library/Caches/Homebrew")
-    if Process.uid == 0
-      root_library
-    else
-      home_library = Pathname.new("~/Library/Caches/Homebrew").expand_path
-      if not home_library.writable?
+    if SystemCommand.platform == :mac
+      root_library = Pathname.new("/Library/Caches/Homebrew")
+      if Process.uid == 0
         root_library
       else
-        home_library
+        home_library = Pathname.new("~/Library/Caches/Homebrew").expand_path
+        if not home_library.writable?
+          root_library
+        else
+          home_library
+        end
       end
+    else
+      Pathname.new("#{ENV['HOME']}/.homebrew/cache")
     end
   end
 end
@@ -55,7 +59,7 @@ if SystemCommand.platform == :mac
   MACOS_FULL_VERSION = `/usr/bin/sw_vers -productVersion`.chomp
   MACOS_VERSION = /(10\.\d+)(\.\d+)?/.match(MACOS_FULL_VERSION).captures.first.to_f
 else
-  MACOS_FULL_VERSION = "#{SystemCommand.uname} -r"
+  MACOS_FULL_VERSION = `#{SystemCommand.uname} -r`.strip
   MACOS_VERSION = '2.6'
 end
 
