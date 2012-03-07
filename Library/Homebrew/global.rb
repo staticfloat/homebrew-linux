@@ -3,6 +3,7 @@ require 'extend/ARGV'
 require 'extend/string'
 require 'utils'
 require 'exceptions'
+require 'system_command'
 
 ARGV.extend(HomebrewArgvExtension)
 
@@ -50,17 +51,26 @@ HOMEBREW_CELLAR = if (HOMEBREW_PREFIX+"Cellar").exist?
 else
   HOMEBREW_REPOSITORY+"Cellar"
 end
-
-MACOS_FULL_VERSION = `/usr/bin/sw_vers -productVersion`.chomp
-MACOS_VERSION = /(10\.\d+)(\.\d+)?/.match(MACOS_FULL_VERSION).captures.first.to_f
+if SystemCommand.platform == :mac
+  MACOS_FULL_VERSION = `/usr/bin/sw_vers -productVersion`.chomp
+  MACOS_VERSION = /(10\.\d+)(\.\d+)?/.match(MACOS_FULL_VERSION).captures.first.to_f
+else
+  MACOS_FULL_VERSION = "#{SystemCommand.uname} -r"
+  MACOS_VERSION = '2.6'
+end
 
 HOMEBREW_USER_AGENT = "Homebrew #{HOMEBREW_VERSION} (Ruby #{RUBY_VERSION}-#{RUBY_PATCHLEVEL}; Mac OS X #{MACOS_FULL_VERSION})"
 
 HOMEBREW_CURL_ARGS = '-qf#LA'
 
 RECOMMENDED_LLVM = 2326
-RECOMMENDED_GCC_40 = (MACOS_VERSION >= 10.6) ? 5494 : 5493
-RECOMMENDED_GCC_42 = (MACOS_VERSION >= 10.6) ? 5664 : 5577
+if SystemCommand.platform == :mac
+  RECOMMENDED_GCC_40 = (MACOS_VERSION >= 10.6) ? 5494 : 5493
+  RECOMMENDED_GCC_42 = (MACOS_VERSION >= 10.6) ? 5664 : 5577
+else 
+  RECOMMENDED_GCC_40 = 4
+  RECOMMENDED_GCC_42 = 4
+end
 
 require 'fileutils'
 module Homebrew extend self
