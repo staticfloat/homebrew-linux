@@ -15,7 +15,11 @@ class FormulaInstaller
     @f = ff
     @show_header = true
     @ignore_deps = ARGV.include? '--ignore-dependencies' || ARGV.interactive?
-    @install_bottle = !ARGV.build_from_source? && ff.bottle_up_to_date?
+    if SystemCommand.platform == :mac
+      @install_bottle = !ARGV.build_from_source? && ff.bottle_up_to_date?
+    else
+      @install_bottle = nil
+    end
 
     check_install_sanity
   end

@@ -94,7 +94,9 @@ module HomebrewArgvExtension
   end
 
   def build_bottle?
-    MacOS.bottles_supported? and include? '--build-bottle'
+    if SystemCommand.platform == :mac
+      MacOS.bottles_supported? and include? '--build-bottle'
+    end
   end
 
   def build_from_source?
