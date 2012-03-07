@@ -2,7 +2,7 @@ require 'formula'
 
 module Homebrew extend self
   def versions
-    raise "Please `brew install git` first" unless system "/usr/bin/which -s git"
+    raise "Please `brew install git` first" unless system "#{SystemCommand.which_s} git > /dev/null"
 
     raise FormulaUnspecifiedError if ARGV.named.empty?
 
