@@ -22,20 +22,25 @@ module HomebrewEnvExtension
       self['CMAKE_PREFIX_PATH'] = "#{HOMEBREW_PREFIX}"
     end
 
-    # Os is the default Apple uses for all its stuff so let's trust them
-    set_cflags "-Os #{SAFE_CFLAGS_FLAGS}"
+    if SystemCommand.platform == :linux
+      self['CC'] = '/usr/bin/cc'
+      self['CXX'] = '/usr/bin/c++'
+      cflags = ['-O3']
+    else
+      # Os is the default Apple uses for all its stuff so let's trust them
+      set_cflags "-Os #{SAFE_CFLAGS_FLAGS}"
 
-    # set us up for the user's compiler choice
-    self.send self.compiler
+      # set us up for the user's compiler choice
+      self.send self.compiler
 
-    # we must have a working compiler!
-    unless ENV['CC']
-      @compiler = MacOS.default_compiler
-      self.send @compiler
-      ENV['CC']  = '/usr/bin/cc'
-      ENV['CXX'] = '/usr/bin/c++'
+      # we must have a working compiler!
+      unless ENV['CC']
+        @compiler = MacOS.default_compiler
+        self.send @compiler
+        ENV['CC']  = '/usr/bin/cc'
+        ENV['CXX'] = '/usr/bin/c++'
+      end
     end
-
     # In rare cases this may break your builds, as the tool for some reason wants
     # to use a specific linker. However doing this in general causes formula to
     # build more successfully because we are changing CC and many build systems
