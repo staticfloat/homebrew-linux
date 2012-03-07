@@ -35,13 +35,15 @@ module Homebrew extend self
   end
 
   def check_cc
-    if MacOS.snow_leopard?
-      if MacOS.llvm_build_version < RECOMMENDED_LLVM
-        opoo "You should upgrade to Xcode 3.2.6"
-      end
-    else
-      if (MacOS.gcc_40_build_version < RECOMMENDED_GCC_40) or (MacOS.gcc_42_build_version < RECOMMENDED_GCC_42)
-        opoo "You should upgrade to Xcode 3.1.4"
+    if SystemCommand.platform == :mac
+      if MacOS.snow_leopard?
+        if MacOS.llvm_build_version < RECOMMENDED_LLVM
+          opoo "You should upgrade to Xcode 3.2.6"
+        end
+      else
+        if (MacOS.gcc_40_build_version < RECOMMENDED_GCC_40) or (MacOS.gcc_42_build_version < RECOMMENDED_GCC_42)
+          opoo "You should upgrade to Xcode 3.1.4"
+        end
       end
     end
   rescue
@@ -51,10 +53,12 @@ module Homebrew extend self
   end
 
   def check_macports
-    if MacOS.macports_or_fink_installed?
-      opoo "It appears you have MacPorts or Fink installed."
-      puts "Software installed with other package managers causes known problems for"
-      puts "Homebrew. If a formula fails to build, uninstall MacPorts/Fink and try again."
+    if SystemCommand.platform == :mac
+      if MacOS.macports_or_fink_installed?
+        opoo "It appears you have MacPorts or Fink installed."
+        puts "Software installed with other package managers causes known problems for"
+        puts "Homebrew. If a formula fails to build, uninstall MacPorts/Fink and try again."
+      end
     end
   end
 

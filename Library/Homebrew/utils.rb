@@ -335,6 +335,9 @@ module MacOS extend self
   end
 
   def xcode_prefix
+    if SystemCommand.platform != :mac
+      return nil
+    end
     @xcode_prefix ||= begin
       path = `/usr/bin/xcode-select -print-path 2>/dev/null`.chomp
       path = Pathname.new path
