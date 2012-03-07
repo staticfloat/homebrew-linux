@@ -14,7 +14,7 @@ module FileUtils extend self
     # /tmp volume to the other volume. So we let the user override the tmp
     # prefix if they need to.
     tmp_prefix = ENV['HOMEBREW_TEMP'] || '/tmp'
-    tmp=Pathname.new `/usr/bin/mktemp -d #{tmp_prefix}/homebrew-#{name}-#{version}-XXXX`.strip
+    tmp=Pathname.new `#{SystemCommand.mktemp} -d #{tmp_prefix}/homebrew-#{name}-#{version}-XXXX`.strip
     raise "Couldn't create build sandbox" if not tmp.directory? or $? != 0
     begin
       wd=Dir.pwd

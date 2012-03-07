@@ -83,18 +83,18 @@ class CurlDownloadStrategy < AbstractDownloadStrategy
     # magic numbers stolen from /usr/share/file/magic/
     case magic_bytes
     when /^PK\003\004/ # .zip archive
-      quiet_safe_system '/usr/bin/unzip', {:quiet_flag => '-qq'}, @tarball_path
+      quiet_safe_system SystemCommand.unzip, {:quiet_flag => '-qq'}, @tarball_path
       chdir
     when /^\037\213/, /^BZh/, /^\037\235/  # gzip/bz2/compress compressed
       # TODO check if it's really a tar archive
-      safe_system '/usr/bin/tar', 'xf', @tarball_path
+      safe_system SystemCommand.tar, 'xf', @tarball_path
       chdir
     when /^\xFD7zXZ\x00/ # xz compressed
       raise "You must install XZutils: brew install xz" unless system "#{SystemCommand.which_s} xz > /dev/null"
-      safe_system "xz -dc #{@tarball_path} | /usr/bin/tar xf -"
+      safe_system "xz -dc #{@tarball_path} | #{SystemCommand.tar} xf -"
       chdir
     when '____pkg'
-      safe_system '/usr/sbin/pkgutil', '--expand', @tarball_path, File.basename(@url)
+      safe_system SystemCommand.pkgutil, '--expand', @tarball_path, File.basename(@url)
       chdir
     when 'Rar!'
       quiet_safe_system 'unrar', 'x', {:quiet_flag => '-inul'}, @tarball_path
@@ -174,7 +174,7 @@ end
 class GzipOnlyDownloadStrategy < CurlDownloadStrategy
   def stage
     FileUtils.mv @tarball_path, File.basename(@url)
-    safe_system '/usr/bin/gunzip', '-f', File.basename(@url)
+    safe_system SystemCommand.gunzip, '-f', File.basename(@url)
   end
 end
 
@@ -264,7 +264,7 @@ class SubversionDownloadStrategy < AbstractDownloadStrategy
   def svn
     return ENV['HOMEBREW_SVN'] if ENV['HOMEBREW_SVN']
     return "#{HOMEBREW_PREFIX}/bin/svn" if File.exist? "#{HOMEBREW_PREFIX}/bin/svn"
-    return '/usr/bin/svn'
+    return SystemCommand.svn
   end
 end
 
@@ -407,12 +407,12 @@ class CVSDownloadStrategy < AbstractDownloadStrategy
 
     unless @co.exist?
       Dir.chdir HOMEBREW_CACHE do
-        safe_system '/usr/bin/cvs', '-d', url, 'login'
-        safe_system '/usr/bin/cvs', '-d', url, 'checkout', '-d', @unique_token, mod
+        safe_system SystemCommand.cvs, '-d', url, 'login'
+        safe_system SystemCommand.cvs, '-d', url, 'checkout', '-d', @unique_token, mod
       end
     else
       puts "Updating #{@co}"
-      Dir.chdir(@co) { safe_system '/usr/bin/cvs', 'up' }
+      Dir.chdir(@co) { safe_system SystemCommand.cvs, 'up' }
     end
   end
 
