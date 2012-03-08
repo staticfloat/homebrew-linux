@@ -2,6 +2,7 @@ require 'download_strategy'
 require 'formula_support'
 require 'hardware'
 require 'extend/fileutils'
+require 'set'
 
 
 # Derive and define at least @url, see Library/Formula for examples
@@ -54,6 +55,9 @@ class Formula
     CHECKSUM_TYPES.each { |type| set_instance_variable type }
 
     @downloader=download_strategy.new @spec_to_use.url, name, version, @spec_to_use.specs
+
+    # Default to just being on mac; the individual instance must set this explicitly
+    @platforms = [:mac].to_set
   end
 
   # if the dir is there, but it's empty we consider it not installed
@@ -439,6 +443,7 @@ public
 
   # For brew-fetch and others.
   def fetch
+
     downloader = @downloader
     # Don't attempt mirrors if this install is not pointed at a "stable" URL.
     # This can happen when options like `--HEAD` are invoked.
@@ -717,6 +722,10 @@ private
     def fails_with_llvm msg=nil, data=nil
       @fails_with_llvm_reason = FailsWithLLVM.new(msg, data)
     end
+  end
+
+  def platforms *platforms
+    @platforms = platforms.to_set
   end
 end
 
