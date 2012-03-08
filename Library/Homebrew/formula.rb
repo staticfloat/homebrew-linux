@@ -46,11 +46,15 @@ class Formula
     @name=name
     validate_variable :name
 
+    # Build the platform if it is nil
+    @platforms = [].to_set if @platforms.nil?
     # Do platform validation
-    if @platforms.nil? and SystemCommand.platform != :mac
-      # Check the override
-      if not ARGV.flag? '--forcelinux'
-        raise "Formula #{name} is Mac-only! Pass --forcelinux to try anyway, but this may break"
+    if @platforms.empty?
+      unless SystemCommand.platform == :mac
+        # Check the override
+        if not ARGV.flag? '--forcelinux'
+          raise "Formula #{name} is Mac-only! Pass --forcelinux to try anyway, but this may break"
+        end
       end
     else
       # Check the current platform is specified, if it is at all
