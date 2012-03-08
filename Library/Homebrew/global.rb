@@ -8,7 +8,7 @@ require 'system_command'
 ARGV.extend(HomebrewArgvExtension)
 
 HOMEBREW_VERSION = '0.8.1'
-HOMEBREW_WWW = 'http://mxcl.github.com/homebrew/'
+HOMEBREW_WWW = 'https://github.com/ndevenish/homebrew'
 
 def cache
   if ENV['HOMEBREW_CACHE']
