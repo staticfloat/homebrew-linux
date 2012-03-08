@@ -46,7 +46,11 @@ Dir.getwd rescue abort "The current working directory doesn't exist, cannot proc
 
 
 def require? path
-  require path.to_s.chomp
+  if path.nil?
+    nil
+  else
+    require path.to_s.chomp
+  end
 rescue LoadError => e
   # HACK :( because we should raise on syntax errors but
   # not if the file doesn't exist. TODO make robust!
