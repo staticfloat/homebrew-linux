@@ -54,8 +54,9 @@ class Formula
       end
     else
       # Check the current platform is specified, if it is at all
+      # If not, then this platform must have been excluded for a reason?
       if not @platforms.include? SystemCommand.platform
-        raise "Current platform not supported for #{name}"
+        raise "Current platform not supported for #{name}. Edit the Formula to change this."
       end
     end
 
