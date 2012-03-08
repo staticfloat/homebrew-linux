@@ -46,7 +46,18 @@ class Formula
     @name=name
     validate_variable :name
 
-    raise "No platform specified for #{name}" if @platforms.nil?
+    # Do platform validation
+    if @platforms.nil? and SystemCommand.platform != :mac
+      # Check the override
+      if not ARGV.flag? '--forcelinux'
+        raise "Formula #{name} is Mac-only! Pass --forcelinux to try anyway, but this may break"
+      end
+    else
+      # Check the current platform is specified, if it is at all
+      if not @platforms.include? SystemCommand.platform
+        raise "Current platform not supported for #{name}"
+      end
+    end
 
     # If we got an explicit path, use that, else determine from the name
     @path = path.nil? ? self.class.path(name) : Pathname.new(path)
