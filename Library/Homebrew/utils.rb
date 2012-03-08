@@ -147,7 +147,6 @@ def which( command )
     p = File.expand_path(path)
     fullpath = File.join(p, command)
     if File.executable?(fullpath)
-      puts "Found #{fullpath} for #{command}"
       return fullpath
     end
   end
