@@ -480,18 +480,22 @@ module MacOS extend self
   end
 
   def leopard?
+    return nil if not SystemCommand.platform == :mac
     10.5 == MACOS_VERSION
   end
 
   def snow_leopard?
+    return nil if not SystemCommand.platform == :mac
     10.6 <= MACOS_VERSION # Actually Snow Leopard or newer
   end
 
   def lion?
+    return nil if not SystemCommand.platform == :mac
     10.7 <= MACOS_VERSION # Actually Lion or newer
   end
 
   def mountain_lion?
+    return nil if not SystemCommand.platform == :mac
     10.8 <= MACOS_VERSION # Actually Mountain Lion or newer
   end
 
