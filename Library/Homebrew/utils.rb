@@ -151,7 +151,7 @@ def which( command )
       return fullpath
     end
   end
-  nil
+  ""
 end
 
 def which_editor
