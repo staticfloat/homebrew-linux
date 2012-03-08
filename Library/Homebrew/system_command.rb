@@ -54,7 +54,7 @@ class SystemCommand
   end
 
   def self.ruby
-    `#{SystemCommand.which_s} ruby`.chomp
+    which("ruby")
   end
 end
 

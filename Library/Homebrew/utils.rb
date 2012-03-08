@@ -142,13 +142,16 @@ def puts_columns items, star_items=[]
   end
 end
 
-def which cmd
-  path = `#{SystemCommand.which} #{cmd}`.chomp
-  if path.empty?
-    nil
-  else
-    Pathname.new(path)
+def which( command )
+  ENV["PATH"].split(":").each do |path|
+    p = File.expand_path(path)
+    fullpath = File.join(p, command)
+    if File.executable?(fullpath)
+      puts "Found #{fullpath} for #{command}"
+      return fullpath
+    end
   end
+  nil
 end
 
 def which_editor
@@ -157,11 +160,11 @@ def which_editor
   return editor unless editor.nil?
 
   # Find Textmate
-  return 'mate' if system "#{SystemCommand.which_s} mate > /dev/null"
+  return 'mate' if which("mate")
   # Find # BBEdit / TextWrangler
-  return 'edit' if system "#{SystemCommand.which_s} edit > /dev/null"
+  return 'edit' if which("edit")
   # Default to vim
-  return '/usr/bin/vim'
+  return which("vim")
 end
 
 def exec_editor *args
@@ -199,10 +202,10 @@ end
 # Returns array of architectures that the given command or library is built for.
 def archs_for_command cmd
   cmd = cmd.to_s # If we were passed a Pathname, turn it into a string.
-  cmd = `#{SystemCommand.which} #{cmd}` unless Pathname.new(cmd).absolute?
+  cmd =which(cmd) unless Pathname.new(cmd).absolute?
   cmd.gsub! ' ', '\\ '  # Escape spaces in the filename.
 
-  lines = `/usr/bin/file -L #{cmd}`
+  lines = `#{which("file")} -L #{cmd}`
   archs = lines.to_a.inject([]) do |archs, line|
     case line
     when /Mach-O (executable|dynamically linked shared library) ppc/
@@ -374,7 +377,7 @@ module MacOS extend self
       # Xcode 4.3 xc* tools hang indefinately if xcode-select path is set thus
       raise if `xcode-select -print-path 2>/dev/null`.chomp == "/"
 
-      raise unless system "#{SystemCommand.which_s} xcodebuild > /dev/null"
+      raise unless which("xcodebuild")
       `xcodebuild -version 2>/dev/null` =~ /Xcode (\d(\.\d)*)/
       raise if $1.nil? or not $?.success?
       $1
@@ -453,7 +456,7 @@ module MacOS extend self
     # http://github.com/mxcl/homebrew/issues/#issue/48
 
     %w[port fink].each do |ponk|
-      path = `#{SystemCommand.which} #{ponk}`
+      path = which(ponk)
       return ponk unless path.empty?
     end
 
@@ -545,16 +548,4 @@ module GitHub extend self
   rescue
     nil
   end
-end
-
-def which( command )
-  ENV["PATH"].split(":").each do |path|
-    p = File.expand_path(path)
-    fullpath = File.join(p, command)
-    if File.executable?(fullpath)
-      puts "Found #{fullpath} for #{command}"
-      return fullpath
-    end
-  end
-  nil
 end
