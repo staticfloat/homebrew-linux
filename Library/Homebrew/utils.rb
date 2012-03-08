@@ -546,3 +546,15 @@ module GitHub extend self
     nil
   end
 end
+
+def which( command )
+  ENV["PATH"].split(":").each do |path|
+    p = File.expand_path(path)
+    fullpath = File.join(p, command)
+    if File.executable?(fullpath)
+      puts "Found #{fullpath} for #{command}"
+      return fullpath
+    end
+  end
+  nil
+end
