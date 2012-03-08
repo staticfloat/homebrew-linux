@@ -46,7 +46,7 @@ class Formula
     @name=name
     validate_variable :name
 
-    raise "No platform specified for #{name}" if @platformlist.nil?
+    raise "No platform specified for #{name}" if @platforms.nil?
 
     # If we got an explicit path, use that, else determine from the name
     @path = path.nil? ? self.class.path(name) : Pathname.new(path)
@@ -621,7 +621,8 @@ private
     attr_rw(*CHECKSUM_TYPES)
 
     def platforms *list
-      @platformlist = list.to_set()
+      return @platforms if list.empty?
+      @platforms = list.to_set()
     end
 
     def head val=nil, specs=nil
