@@ -457,7 +457,7 @@ module MacOS extend self
 
     %w[port fink].each do |ponk|
       path = which(ponk)
-      return ponk unless path.empty?
+      return ponk unless path.nil?
     end
 
     # we do the above check because macports can be relocated and fink may be
