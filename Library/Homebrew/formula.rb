@@ -9,7 +9,7 @@ require 'set'
 class Formula
   include FileUtils
 
-  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader
+  attr_reader :name, :path, :url, :version, :homepage, :specs, :downloader, :platforms
   attr_reader :standard, :unstable
   attr_reader :bottle_url, :bottle_sha1, :head
 
@@ -25,6 +25,7 @@ class Formula
     set_instance_variable 'bottle_sha1'
     set_instance_variable 'head'
     set_instance_variable 'specs'
+    set_instance_variable 'platforms'
 
     set_instance_variable 'standard'
     set_instance_variable 'unstable'
@@ -45,6 +46,8 @@ class Formula
     @name=name
     validate_variable :name
 
+    raise "No platform specified for #{name}" if @platformlist.nil?
+
     # If we got an explicit path, use that, else determine from the name
     @path = path.nil? ? self.class.path(name) : Pathname.new(path)
 
@@ -55,9 +58,6 @@ class Formula
     CHECKSUM_TYPES.each { |type| set_instance_variable type }
 
     @downloader=download_strategy.new @spec_to_use.url, name, version, @spec_to_use.specs
-
-    # Default to just being on mac; the individual instance must set this explicitly
-    @platforms = [:mac].to_set
   end
 
   # if the dir is there, but it's empty we consider it not installed
@@ -620,6 +620,10 @@ private
     attr_rw :bottle_url, :bottle_sha1
     attr_rw(*CHECKSUM_TYPES)
 
+    def platforms *list
+      @platformlist = list.to_set()
+    end
+
     def head val=nil, specs=nil
       return @head if val.nil?
       @unstable = SoftwareSpecification.new(val, specs)
@@ -722,10 +726,6 @@ private
     def fails_with_llvm msg=nil, data=nil
       @fails_with_llvm_reason = FailsWithLLVM.new(msg, data)
     end
-  end
-
-  def platforms *platforms
-    @platforms = platforms.to_set
   end
 end
 
