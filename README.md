@@ -1,6 +1,10 @@
 Homebrew
 ========
-Features, usage and installation instructions are [summarized on the homepage][home].
+This is an experimental Linux port of the Mac version of Homebrew. Installation currently only works via the manual method.
+
+Instructions for the mac version can be found on [the original homepage][home].
+
+Use at your peril.
 
 What Packages Are Available?
 ----------------------------
@@ -11,11 +15,13 @@ What Packages Are Available?
 
 More Documentation
 ------------------
-`brew help` or `man brew` or check our [wiki][].
+`brew help` or `man brew` or check the mac version [wiki][].
 
 Who Are You?
 ------------
-I'm [Max Howell][mxcl] and I'm a splendid chap.
+Well, Homebrew is written by a splendid chap named [Max Howell][mxcl].
+
+I'm Nick.
 
 
 [home]:http://mxcl.github.com/homebrew
