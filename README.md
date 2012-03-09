@@ -1,6 +1,8 @@
 Homebrew
 ========
-This is an experimental Linux port of the Mac version of Homebrew. Installation currently only works via the manual method.
+This is an experimental Linux port of the Mac version of Homebrew. Installation currently only works via the [manual method][install].
+
+Changes in this version should be summarised in [Linux Version Changes and Features][changes]
 
 Instructions for the mac version can be found on [the original homepage][home].
 
@@ -30,3 +32,5 @@ I'm [Nick Devenish][nick].
 [formula]:http://github.com/mxcl/homebrew/tree/master/Library/Formula/
 [braumeister]:http://braumeister.org
 [nick]:http://twitter.com/ndevenish
+[changes]:https://github.com/ndevenish/homebrew/wiki/Linux-Version-Changes-and-Features
+[install]:https://github.com/ndevenish/homebrew/wiki/Installation-on-Linux
