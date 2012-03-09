@@ -21,7 +21,7 @@ Who Are You?
 ------------
 Well, Homebrew is written by a splendid chap named [Max Howell][mxcl].
 
-I'm Nick.
+I'm [Nick Devenish][nick].
 
 
 [home]:http://mxcl.github.com/homebrew
@@ -29,3 +29,4 @@ I'm Nick.
 [mxcl]:http://twitter.com/mxcl
 [formula]:http://github.com/mxcl/homebrew/tree/master/Library/Formula/
 [braumeister]:http://braumeister.org
+[nick]:http://twitter.com/ndevenish
