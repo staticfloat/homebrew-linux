@@ -7,7 +7,7 @@ class Curl < Formula
   platforms :mac, :linux
 
   keg_only :provided_by_osx,
-            "The libcurl provided by Leopard is too old for CouchDB to use." if SystemCommand.platform == :mac
+            "The libcurl provided by Leopard is too old for CouchDB to use." if mac
 
   def install
     system "./configure", "--disable-debug", "--disable-dependency-tracking",

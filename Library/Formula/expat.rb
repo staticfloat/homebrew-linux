@@ -14,8 +14,6 @@ class Expat < Formula
   end
 
   def caveats
-    if SystemCommand.platform == :mac
-      "Note that OS X has Expat 1.5 installed in /usr already."
-    end
+    "Note that OS X has Expat 1.5 installed in /usr already." if mac
   end
 end

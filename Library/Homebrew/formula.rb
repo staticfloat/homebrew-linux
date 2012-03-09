@@ -408,7 +408,14 @@ class Formula
       expand_deps(dep) << dep
     end
   end
-
+  
+  # Convenience functions to tell if we are using mac or linux in the formula
+  def self.mac
+    SystemCommand.platform == :mac
+  end
+  def self.linux
+    SystemCommand.platform == :linux
+  end
 protected
 
   # Pretty titles the command and buffers stdout/stderr
