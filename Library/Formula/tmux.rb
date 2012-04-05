@@ -5,6 +5,8 @@ class Tmux < Formula
   md5 '3e37db24aa596bf108a0442a81c845b3'
   homepage 'http://tmux.sourceforge.net'
 
+  platforms :mac, :linux
+
   head 'https://tmux.svn.sourceforge.net/svnroot/tmux/trunk'
 
   depends_on 'libevent'
