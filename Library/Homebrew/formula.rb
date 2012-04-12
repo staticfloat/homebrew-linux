@@ -52,7 +52,7 @@ class Formula
     if @platforms.empty?
       unless SystemCommand.platform == :mac
         # Check the override
-        if not ARGV.flag? '--forcelinux'
+        if not ARGV.forcelinux?
           raise "Formula #{name} is Mac-only! Pass --forcelinux to try anyway, but this may break"
         end
       end
